@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.auth.dao.mapper.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.auth.dao.entity.Permission">
+    <!--@mbg.generated-->
+    <!--@Table permission-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="policy" jdbcType="VARCHAR" property="policy" />
+    <result column="external_id" jdbcType="BIGINT" property="externalId" />
+    <result column="domain_id" jdbcType="BIGINT" property="domainId" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="mender" jdbcType="BIGINT" property="mender" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, description, `type`, `status`, policy, external_id, domain_id, expire_time, creator, 
+    mender, create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from permission
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.auth.dao.entity.Permission" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into permission (description, `type`, `status`, 
+      policy, external_id, domain_id, 
+      expire_time, creator, mender)
+    values (#{description,jdbcType=LONGVARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{policy,jdbcType=VARCHAR}, #{externalId,jdbcType=BIGINT}, #{domainId,jdbcType=BIGINT}, 
+      #{expireTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, #{mender,jdbcType=BIGINT})
+  </insert>
+
+  <select id="selectByPolicies" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from permission
+    where policy in
+    <foreach collection="policies" item="policy" open="(" close=")" separator=",">
+      #{policy}
+    </foreach>
+    </select>
+</mapper>

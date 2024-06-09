@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  wall_mysql:
+    image: mysql:latest
+    container_name: wall_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: wall_password
+      MYSQL_DATABASE: wall
+    ports:
+      - 9918:3306

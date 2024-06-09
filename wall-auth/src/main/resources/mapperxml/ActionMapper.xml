@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.auth.dao.mapper.ActionMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.auth.dao.entity.Action">
+    <!--@mbg.generated-->
+    <!--@Table `action`-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="domain_id" jdbcType="BIGINT" property="domainId" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="mender" jdbcType="BIGINT" property="mender" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, description, `type`, `status`, domain_id, creator, mender, create_time, 
+    modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from `action`
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from `action`
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.auth.dao.entity.Action" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `action` (`name`, description, `type`, 
+      `status`, domain_id, creator, 
+      mender
+      )
+    values (#{name,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{domainId,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT}, 
+      #{mender,jdbcType=BIGINT}
+      )
+  </insert>
+
+  <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.auth.dao.entity.Action">
+    <!--@mbg.generated-->
+    update `action`
+    set `name` = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR},
+      `type` = #{type,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=TINYINT},
+      domain_id = #{domainId,jdbcType=BIGINT},
+      creator = #{creator,jdbcType=BIGINT},
+      mender = #{mender,jdbcType=BIGINT},
+      modify_time = CURRENT_TIMESTAMP
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into `action`
+    (`name`, description, `type`, `status`, domain_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.name,jdbcType=VARCHAR}, #{item.description,jdbcType=LONGVARCHAR}, #{item.type,jdbcType=TINYINT}, 
+        #{item.status,jdbcType=TINYINT}, #{item.domainId,jdbcType=BIGINT}, #{item.creator,jdbcType=BIGINT},
+       #{item.mender,jdbcType=BIGINT}
+        )
+    </foreach>
+  </insert>
+
+    <select id="selectByNameAndDomain" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `action`
+        where `name` = #{name,jdbcType=VARCHAR}
+        and domain_id = #{domainId,jdbcType=INTEGER}
+    </select>
+</mapper>

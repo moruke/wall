@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.auth.dao.mapper.CasbinPolicyMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.auth.dao.entity.CasbinPolicy">
+    <!--@mbg.generated-->
+    <!--@Table casbin_policy-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ptype" jdbcType="VARCHAR" property="ptype" />
+    <result column="v0" jdbcType="VARCHAR" property="v0" />
+    <result column="v1" jdbcType="VARCHAR" property="v1" />
+    <result column="v2" jdbcType="VARCHAR" property="v2" />
+    <result column="v3" jdbcType="VARCHAR" property="v3" />
+    <result column="v4" jdbcType="VARCHAR" property="v4" />
+    <result column="v5" jdbcType="VARCHAR" property="v5" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, ptype, v0, v1, v2, v3, v4, v5
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from casbin_policy
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from casbin_policy
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.auth.dao.entity.CasbinPolicy" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into casbin_policy (ptype, v0, v1, 
+      v2, v3, v4, v5
+      )
+    values (#{ptype,jdbcType=VARCHAR}, #{v0,jdbcType=VARCHAR}, #{v1,jdbcType=VARCHAR}, 
+      #{v2,jdbcType=VARCHAR}, #{v3,jdbcType=VARCHAR}, #{v4,jdbcType=VARCHAR}, #{v5,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.auth.dao.entity.CasbinPolicy" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into casbin_policy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ptype != null">
+        ptype,
+      </if>
+      <if test="v0 != null">
+        v0,
+      </if>
+      <if test="v1 != null">
+        v1,
+      </if>
+      <if test="v2 != null">
+        v2,
+      </if>
+      <if test="v3 != null">
+        v3,
+      </if>
+      <if test="v4 != null">
+        v4,
+      </if>
+      <if test="v5 != null">
+        v5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ptype != null">
+        #{ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="v0 != null">
+        #{v0,jdbcType=VARCHAR},
+      </if>
+      <if test="v1 != null">
+        #{v1,jdbcType=VARCHAR},
+      </if>
+      <if test="v2 != null">
+        #{v2,jdbcType=VARCHAR},
+      </if>
+      <if test="v3 != null">
+        #{v3,jdbcType=VARCHAR},
+      </if>
+      <if test="v4 != null">
+        #{v4,jdbcType=VARCHAR},
+      </if>
+      <if test="v5 != null">
+        #{v5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.moruke.wall.auth.dao.entity.CasbinPolicy">
+    <!--@mbg.generated-->
+    update casbin_policy
+    <set>
+      <if test="ptype != null">
+        ptype = #{ptype,jdbcType=VARCHAR},
+      </if>
+      <if test="v0 != null">
+        v0 = #{v0,jdbcType=VARCHAR},
+      </if>
+      <if test="v1 != null">
+        v1 = #{v1,jdbcType=VARCHAR},
+      </if>
+      <if test="v2 != null">
+        v2 = #{v2,jdbcType=VARCHAR},
+      </if>
+      <if test="v3 != null">
+        v3 = #{v3,jdbcType=VARCHAR},
+      </if>
+      <if test="v4 != null">
+        v4 = #{v4,jdbcType=VARCHAR},
+      </if>
+      <if test="v5 != null">
+        v5 = #{v5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.auth.dao.entity.CasbinPolicy">
+    <!--@mbg.generated-->
+    update casbin_policy
+    set ptype = #{ptype,jdbcType=VARCHAR},
+      v0 = #{v0,jdbcType=VARCHAR},
+      v1 = #{v1,jdbcType=VARCHAR},
+      v2 = #{v2,jdbcType=VARCHAR},
+      v3 = #{v3,jdbcType=VARCHAR},
+      v4 = #{v4,jdbcType=VARCHAR},
+      v5 = #{v5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into casbin_policy
+    (ptype, v0, v1, v2, v3, v4, v5)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.ptype,jdbcType=VARCHAR}, #{item.v0,jdbcType=VARCHAR}, #{item.v1,jdbcType=VARCHAR}, 
+        #{item.v2,jdbcType=VARCHAR}, #{item.v3,jdbcType=VARCHAR}, #{item.v4,jdbcType=VARCHAR}, 
+        #{item.v5,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <delete id="batchDelete">
+    <!--@mbg.generated-->
+    delete from casbin_policy
+    where id in
+    <foreach collection="ids" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    </delete>
+
+  <select id="selectAllPolicy" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from casbin_policy
+  </select>
+
+  <delete id="deleteAll">
+    <!--@mbg.generated-->
+    delete from casbin_policy
+  </delete>
+</mapper>

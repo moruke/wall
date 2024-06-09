@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.auth.dao.mapper.RoleRelationMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.auth.dao.entity.RoleRelation">
+    <!--@mbg.generated-->
+    <!--@Table role_relation-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="subject_id" jdbcType="VARCHAR" property="subjectId" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="mender" jdbcType="BIGINT" property="mender" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, role_id, subject_id, `type`, `status`, expire_time, creator, mender, create_time, 
+    modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from role_relation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from role_relation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.auth.dao.entity.RoleRelation" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into role_relation (role_id, subject_id,
+      `type`, `status`, expire_time, 
+      creator, mender)
+    values (#{roleId,jdbcType=BIGINT}, #{subjectId,jdbcType=VARCHAR},
+      #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{expireTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=BIGINT}, #{mender,jdbcType=BIGINT})
+  </insert>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into role_relation
+    (id, role_id, subject_id, `type`, `status`, expire_time, creator, mender)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=BIGINT}, #{item.roleId,jdbcType=BIGINT}, #{item.subjectId,jdbcType=VARCHAR}, 
+        #{item.type,jdbcType=TINYINT}, #{item.status,jdbcType=TINYINT}, #{item.expireTime,jdbcType=TIMESTAMP}, 
+        #{item.creator,jdbcType=BIGINT}, #{item.mender,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+
+  <select id="selectByRoleIdAndSubjectId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from role_relation
+    where role_id = #{roleId,jdbcType=BIGINT} and subject_id = #{subjectId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectBySubjectId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from role_relation
+    where subject_id = #{subjectId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByIds">
+    <!--@mbg.generated-->
+    delete from role_relation
+    where id in
+    <foreach collection="roleIds" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+  <delete id="deleteByRoleId">
+    <!--@mbg.generated-->
+    delete from role_relation
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+</mapper>
