@@ -96,6 +96,18 @@ public class IRbacIJudgeCasbin implements IRbacIJudge {
     }
 
     @Override
+    public List<Policy> getPermissionsForObject(Long objectId, Long domainId) {
+        final List<List<String>> permissions = rbacEnforcer.getNamedPolicy("p");
+        if (CollectionUtils.isEmpty(permissions)) {
+            return Collections.emptyList();
+        }
+
+        return permissions.stream().filter(
+                p -> p.get(2).equals(objectId.toString()) && p.get(1).equals(domainId.toString())
+        ).map(ConvertUtil::convert).collect(Collectors.toList());
+    }
+
+    @Override
     public boolean removeRole(String role) {
         rbacEnforcer.deleteRole(role);
         return true;

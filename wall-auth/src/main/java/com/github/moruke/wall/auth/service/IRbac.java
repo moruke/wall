@@ -35,4 +35,6 @@ public interface IRbac extends Auth{
 
     List<PermissionDto> getPermissionsForSubject(Long subjectId, SubjectTypeEnum subjectType, Long objectId, Long domainId);
 
+    List<PermissionDto> getPermissionsForObject(Long objectId, Long domainId);
+
 }

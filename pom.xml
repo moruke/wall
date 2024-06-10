@@ -6,7 +6,7 @@
 
     <groupId>com.github.moruke</groupId>
     <artifactId>wall</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>wall-auth</module>
@@ -15,6 +15,7 @@
         <module>wall-demo</module>
         <module>wall-bootstrap</module>
         <module>wall-bootstrap/wall-bootstrap-spring-boot</module>
+        <module>wall-account</module>
     </modules>
 
     <properties>

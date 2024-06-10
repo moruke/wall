@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.account.dao.mapper.OrganizationMapper">
+    <resultMap id="BaseResultMap" type="com.github.moruke.wall.account.dao.entity.Organization">
+        <!--@mbg.generated-->
+        <!--@Table organization-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="root_id" jdbcType="BIGINT" property="rootId"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="mender" jdbcType="BIGINT" property="mender"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        code,
+        `name`,
+        `type`,
+        `status`,
+        parent_id,
+        root_id,
+        creator,
+        mender,
+        create_time,
+        modify_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from organization
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from organization
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.github.moruke.wall.account.dao.entity.Organization" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into organization (code, `name`, `type`,
+                                  `status`, parent_id, root_id,
+                                  creator, mender)
+        values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT},
+                #{status,jdbcType=TINYINT}, #{parentId,jdbcType=BIGINT}, #{rootId,jdbcType=BIGINT},
+                #{creator,jdbcType=BIGINT}, #{mender,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.account.dao.entity.Organization">
+        <!--@mbg.generated-->
+        update organization
+        set code        = #{code,jdbcType=VARCHAR},
+            `name`      = #{name,jdbcType=VARCHAR},
+            `type`      = #{type,jdbcType=TINYINT},
+            `status`    = #{status,jdbcType=TINYINT},
+            parent_id   = #{parentId,jdbcType=BIGINT},
+            root_id     = #{rootId,jdbcType=BIGINT},
+            creator     = #{creator,jdbcType=BIGINT},
+            mender      = #{mender,jdbcType=BIGINT},
+            modify_time = CURRENT_TIMESTAMP
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByNameAndRootId" resultType="java.lang.Object">
+        select id
+        from organization where name = #{name}
+        <choose>
+            <when test="rootId != null">
+                and root_id = #{rootId}
+            </when>
+            <otherwise>
+                and root_id is null
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from organization
+        where parent_id = #{id}
+    </select>
+
+    <select id="selectByNameOrCodeAndRootId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from organization
+        where (name = #{name} or code = #{code})
+        <choose>
+            <when test="rootId != null">
+                and root_id = #{rootId}
+            </when>
+            <otherwise>
+                and root_id is null
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

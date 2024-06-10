@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.account.dao.mapper.UserPropertiesMapper">
+    <resultMap id="BaseResultMap" type="com.github.moruke.wall.account.dao.entity.UserProperties">
+        <!--@mbg.generated-->
+        <!--@Table user_properties-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="property" jdbcType="VARCHAR" property="property"/>
+        <result column="value" jdbcType="LONGVARCHAR" property="value"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="mender" jdbcType="BIGINT" property="mender"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        user_id,
+        property,
+        `value`,
+        `status`,
+        `type`,
+        creator,
+        mender,
+        create_time,
+        modify_time
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from user_properties
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.github.moruke.wall.account.dao.entity.UserProperties" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into user_properties (user_id, property, `value`,
+                                     `status`, `type`, creator,
+                                     mender)
+        values (#{userId,jdbcType=BIGINT}, #{property,jdbcType=VARCHAR}, #{value,jdbcType=LONGVARCHAR},
+                #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{creator,jdbcType=BIGINT},
+                #{mender,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.account.dao.entity.UserProperties">
+        <!--@mbg.generated-->
+        update user_properties
+        set user_id     = #{userId,jdbcType=BIGINT},
+            property    = #{property,jdbcType=VARCHAR},
+            `value`     = #{value,jdbcType=LONGVARCHAR},
+            `status`    = #{status,jdbcType=TINYINT},
+            `type`      = #{type,jdbcType=TINYINT},
+            creator     = #{creator,jdbcType=BIGINT},
+            mender      = #{mender,jdbcType=BIGINT},
+            modify_time = CURRENT_TIMESTAMP
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_properties
+        where user_id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByUserIdAndProperty" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_properties
+        where user_id = #{id,jdbcType=BIGINT}
+          and property = #{property,jdbcType=VARCHAR}
+    </select>
+</mapper>

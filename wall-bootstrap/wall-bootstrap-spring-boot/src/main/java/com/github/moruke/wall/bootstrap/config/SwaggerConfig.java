@@ -1,4 +1,4 @@
-package com.github.moruke.wall.bootstrap.config.auth;
+package com.github.moruke.wall.bootstrap.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

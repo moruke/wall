@@ -15,4 +15,6 @@ public interface IJudge {
     List<Policy> getPermissions(String subjectId, String ObjectId, String domainId);
 
     List<Policy> getPermissions(String subjectId, String domainId);
+
+    List<Policy> getPermissionsForObject(Long objectId, Long domainId);
 }

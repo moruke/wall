@@ -251,6 +251,11 @@ public class RbacImpl implements IRbac {
     }
 
     @Override
+    public List<PermissionDto> getPermissionsForObject(Long objectId, Long domainId) {
+        return getPermissionDtos(rbacJudge.getPermissionsForObject(objectId, domainId));
+    }
+
+    @Override
     public boolean judge(Long subjectId, SubjectTypeEnum subjectType, Long objectId, Long actionId, String domainId) {
         return rbacJudge.judge(subjectType.getId(subjectId), String.valueOf(objectId), String.valueOf(actionId), String.valueOf(domainId));
     }

@@ -1,4 +1,4 @@
-package com.github.moruke.wall.auth.Configuration;
+package com.github.moruke.wall.auth.configuration;
 
 import com.github.moruke.wall.auth.enums.casbin.AdapterTypeEnum;
 import lombok.Data;
