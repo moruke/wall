@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.account.dao.mapper.UserGroupMapper">
+    <resultMap id="BaseResultMap" type="com.github.moruke.wall.account.dao.entity.UserGroup">
+        <!--@mbg.generated-->
+        <!--@Table user_group-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="org_root_id" jdbcType="BIGINT" property="orgRootId"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="mender" jdbcType="BIGINT" property="mender"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        org_root_id,
+        code,
+        `name`,
+        description,
+        `type`,
+        `status`,
+        creator,
+        mender,
+        create_time,
+        modify_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from user_group
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from user_group
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.github.moruke.wall.account.dao.entity.UserGroup" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into user_group (org_root_id, code, `name`,
+                                description, `type`, `status`,
+                                creator, mender)
+        values (#{orgRootId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+                #{description,jdbcType=LONGVARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT},
+                #{creator,jdbcType=BIGINT}, #{mender,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.account.dao.entity.UserGroup">
+        <!--@mbg.generated-->
+        update user_group
+        set org_root_id = #{orgRootId,jdbcType=BIGINT},
+            code        = #{code,jdbcType=VARCHAR},
+            `name`      = #{name,jdbcType=VARCHAR},
+            description = #{description,jdbcType=LONGVARCHAR},
+            `type`      = #{type,jdbcType=TINYINT},
+            `status`    = #{status,jdbcType=TINYINT},
+            mender      = #{mender,jdbcType=BIGINT},
+            modify_time = CURRENT_TIMESTAMP
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByNameAndOrgRootId" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from user_group
+        where `name` = #{name,jdbcType=VARCHAR}
+          and org_root_id = #{orgRootId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByNameOrCodeAndOrgRootId" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from user_group
+        where (`name` = #{name,jdbcType=VARCHAR} or code = #{code,jdbcType=VARCHAR})
+          and org_root_id = #{orgRootId,jdbcType=BIGINT}
+    </select>
+</mapper>

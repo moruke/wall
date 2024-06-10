@@ -45,6 +45,10 @@
         <appender-ref ref="console" />
     </logger>
 
+    <logger name="com.github.moruke.wall.account.dao" level="DEBUG" additivity="false">
+        <appender-ref ref="console" />
+    </logger>
+
     <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="thirdPartyAppender" />
         <appender-ref ref="console" />

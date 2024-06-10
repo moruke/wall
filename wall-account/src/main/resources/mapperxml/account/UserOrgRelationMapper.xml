@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.account.dao.mapper.UserOrgRelationMapper">
+    <resultMap id="BaseResultMap" type="com.github.moruke.wall.account.dao.entity.UserOrgRelation">
+        <!--@mbg.generated-->
+        <!--@Table user_org_relation-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="org_id" jdbcType="BIGINT" property="orgId"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="creator" jdbcType="BIGINT" property="creator"/>
+        <result column="mender" jdbcType="BIGINT" property="mender"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id,
+        user_id,
+        org_id,
+        `type`,
+        `status`,
+        creator,
+        mender,
+        create_time,
+        modify_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from user_org_relation
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from user_org_relation
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.github.moruke.wall.account.dao.entity.UserOrgRelation" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into user_org_relation (user_id, org_id, `type`,
+                                       `status`, creator, mender)
+        values (#{userId,jdbcType=BIGINT}, #{orgId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT},
+                #{status,jdbcType=TINYINT}, #{creator,jdbcType=BIGINT}, #{mender,jdbcType=BIGINT})
+    </insert>
+    <select id="selectByOrgId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_org_relation
+        where org_id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByOrgIdAndUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_org_relation
+        where org_id = #{id,jdbcType=BIGINT}
+          and user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_org_relation
+        where user_id = #{id,jdbcType=BIGINT}
+    </select>
+</mapper>
