@@ -1,6 +1,6 @@
 package com.github.moruke.wall.auth.core.impl.casbin;
 
-import com.github.moruke.wall.auth.Configuration.CasbinProperties;
+import com.github.moruke.wall.auth.configuration.CasbinProperties;
 import com.github.moruke.wall.auth.dao.entity.CasbinPolicy;
 import com.github.moruke.wall.auth.dao.mapper.CasbinPolicyMapper;
 import com.github.moruke.wall.auth.dao.mapper.PermissionMapper;

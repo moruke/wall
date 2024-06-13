@@ -27,7 +27,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 mybatis:
-  mapper-locations: classpath:mapperxml/**/*.xml
+  mapper-locations:
+    - classpath:mapperxml/account/*.xml
+    - classpath:mapperxml/auth/*.xml
 wall:
   plugin:
     auth:
@@ -35,5 +37,16 @@ wall:
         type: casbin
         casbin:
           model-path: casbin/model.conf
+  rules:
+    organization:
+      name-length: 20
+      name-rules: NO_SPECIAL_CHARACTER,NO_SPACE,NO_CHINESE
+    user:
+      name-length: 20
+      name-rules: NO_SPECIAL_CHARACTER,NO_SPACE,NO_CHINESE
+    ug:
+      name-length: 20
+      name-rules: NO_SPECIAL_CHARACTER,NO_SPACE,NO_CHINESE
+
 server:
   port: 10151

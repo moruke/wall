@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.account.dao.mapper.OrganizationInfoMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.account.dao.entity.OrganizationInfo">
+    <!--@mbg.generated-->
+    <!--@Table organization_info-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="org_id" jdbcType="BIGINT" property="orgId" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="contact" jdbcType="VARCHAR" property="contact" />
+    <result column="extra" jdbcType="VARCHAR" property="extra" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="mender" jdbcType="BIGINT" property="mender" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, org_id, nick_name, description, address, contact, extra, creator, mender, create_time, 
+    modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from organization_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from organization_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.account.dao.entity.OrganizationInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into organization_info (org_id, nick_name, description, 
+      address, contact, extra, 
+      creator, mender)
+    values (#{orgId,jdbcType=BIGINT}, #{nickName,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{extra,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=BIGINT}, #{mender,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.account.dao.entity.OrganizationInfo">
+    <!--@mbg.generated-->
+    update organization_info
+    set org_id = #{orgId,jdbcType=BIGINT},
+    nick_name = #{nickName,jdbcType=VARCHAR},
+    description = #{description,jdbcType=LONGVARCHAR},
+    address = #{address,jdbcType=VARCHAR},
+    contact = #{contact,jdbcType=VARCHAR},
+    extra = #{extra,jdbcType=VARCHAR},
+    creator = #{creator,jdbcType=BIGINT},
+    mender = #{mender,jdbcType=BIGINT},
+    modify_time = current_timestamp
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByOrgId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from organization_info
+    where org_id = #{id,jdbcType=BIGINT}
+    </select>
+
+  <delete id="deleteByOrgId">
+    delete from organization_info
+    where org_id = #{id,jdbcType=BIGINT}
+  </delete>
+</mapper>

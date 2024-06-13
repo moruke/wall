@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.account.dao.mapper.UserUgRelationMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.account.dao.entity.UserUgRelation">
+    <!--@mbg.generated-->
+    <!--@Table user_ug_relation-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="user_group_id" jdbcType="BIGINT" property="userGroupId" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="mender" jdbcType="BIGINT" property="mender" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, user_group_id, `type`, `status`, expire_time, creator, mender, create_time, 
+    modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from user_ug_relation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from user_ug_relation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.account.dao.entity.UserUgRelation" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_ug_relation (user_id, user_group_id, `type`, 
+      `status`, expire_time, creator, 
+      mender
+      )
+    values (#{userId,jdbcType=BIGINT}, #{userGroupId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, 
+      #{status,jdbcType=TINYINT}, #{expireTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, 
+      #{mender,jdbcType=BIGINT}
+      )
+  </insert>
+  <select id="selectByUgId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from user_ug_relation
+    where user_group_id = #{id,jdbcType=BIGINT}
+    </select>
+
+  <select id="selectByUgIdAndUserId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from user_ug_relation
+    where user_group_id = #{id,jdbcType=BIGINT}
+    and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from user_ug_relation
+    where user_id = #{id,jdbcType=BIGINT}
+  </select>
+</mapper>
