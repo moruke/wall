@@ -15,7 +15,7 @@ public interface OrganizationMapper {
 
     int updateByPrimaryKey(Organization record);
 
-    Object selectByNameAndRootId(@Param("name") String name, @Param("rootId") Long rootId);
+    Organization selectByNameAndRootId(@Param("name") String name, @Param("rootId") Long rootId);
 
     List<Organization> selectByParentId(@Param("id") Long id);
 

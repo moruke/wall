@@ -7,8 +7,8 @@ import com.github.moruke.wall.account.dto.OrganizationDto;
 import com.github.moruke.wall.account.enums.*;
 import com.github.moruke.wall.account.service.IOrganization;
 import com.github.moruke.wall.account.utils.ConvertUtil;
-import com.github.moruke.wall.common.utils.DateUtils;
-import com.github.moruke.wall.common.utils.NameUtils;
+import com.github.moruke.wall.common.utils.DateUtil;
+import com.github.moruke.wall.common.utils.NameUtil;
 import com.github.moruke.wall.common.utils.Precondition;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,9 +48,9 @@ public class OrganizationImpl implements IOrganization {
     @Transactional(rollbackFor = Exception.class)
     public Long add(OrganizationDto dto) {
 
-        Precondition.checkArgument(NameUtils.checkLength(dto.getName(), nameLength), "Organization name is too long");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getName(), nameRules), "Organization name does not meet the rules");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getNickName(), nameRules), "Organization name does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkLength(dto.getName(), nameLength), "Organization name is too long");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getName(), nameRules), "Organization name does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getNickName(), nameRules), "Organization name does not meet the rules");
 
         final Organization org = ConvertUtil.convert(dto);
         final OrganizationInfo orgInfo = ConvertUtil.convertToInfo(dto);
@@ -185,7 +185,7 @@ public class OrganizationImpl implements IOrganization {
     public boolean updateInfo(OrganizationDto dto) {
 
         Precondition.checkArgument(dto.getId() != null && dto.getId() > 0, "Organization id is invalid");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getNickName(), nameRules), "Organization nickname does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getNickName(), nameRules), "Organization nickname does not meet the rules");
 
         // check exist
         final Organization org = organizationMapper.selectByPrimaryKey(dto.getId());
@@ -488,7 +488,7 @@ public class OrganizationImpl implements IOrganization {
         relation.setCreator(mender);
         relation.setMender(mender);
         // todo think about expire time, whether need it
-        relation.setExpireTime(DateUtils.maxDate());
+        relation.setExpireTime(DateUtil.maxDate());
 
         Precondition.checkArgument(ugOrgRelationMapper.insert(relation) == 1, "Failed to add user group to organization");
 
@@ -511,6 +511,32 @@ public class OrganizationImpl implements IOrganization {
         Precondition.checkArgument(ugOrgRelationMapper.deleteByPrimaryKey(relation.getId()) == 1, "Failed to remove user group from organization");
 
         return true;
+    }
+
+    @Override
+    public OrganizationDto getRootOrgByName(String rootOrgName) {
+        Precondition.checkArgument(StringUtils.isNotBlank(rootOrgName), "Root organization name can not be empty");
+
+        final Organization org = organizationMapper.selectByNameAndRootId(rootOrgName, null);
+
+        Precondition.checkNotNull(org, "Root organization does not exist");
+
+        return ConvertUtil.convertToDto(org, null);
+    }
+
+    @Override
+    public boolean checkValid(Long orgId, Long rootId) {
+        Precondition.checkArgument(orgId != null && orgId > 0, "Organization id is invalid");
+
+        if (rootId == null) {
+            return checkValid(orgId);
+        } else {
+            return checkValid(orgId) && checkValid(rootId);
+        }
+    }
+
+    private boolean checkValid(Long orgId) {
+        return OrgStatusEnum.find(organizationMapper.selectByPrimaryKey(orgId).getStatus()).valid();
     }
 
     private List<Organization> getAllChildren(Long id) {

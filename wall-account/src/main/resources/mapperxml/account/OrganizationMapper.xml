@@ -68,7 +68,7 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <select id="selectByNameAndRootId" resultType="java.lang.Object">
+    <select id="selectByNameAndRootId" resultMap="BaseResultMap">
         select id
         from organization where name = #{name}
         <choose>

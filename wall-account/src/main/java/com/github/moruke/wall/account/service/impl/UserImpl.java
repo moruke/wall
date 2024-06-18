@@ -7,18 +7,17 @@ import com.github.moruke.wall.account.dto.UserPropertiesDto;
 import com.github.moruke.wall.account.enums.*;
 import com.github.moruke.wall.account.service.IUser;
 import com.github.moruke.wall.account.utils.ConvertUtil;
-import com.github.moruke.wall.common.utils.NameUtils;
+import com.github.moruke.wall.common.utils.NameUtil;
 import com.github.moruke.wall.common.utils.Precondition;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,12 +44,15 @@ public class UserImpl implements IUser {
     @Value("#{'${wall.rules.user.name-rules}'.split(',')}")
     private List<String> nameRules;
 
+    @Value("${wall.rules.user.salt-length}")
+    private int saltLength;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long add(UserDto dto) {
-        Precondition.checkArgument(NameUtils.checkLength(dto.getName(), nameLength), "User name is too long");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getName(), nameRules), "User name does not meet the rules");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getNickName(), nameRules), "User name does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkLength(dto.getName(), nameLength), "User name is too long");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getName(), nameRules), "User name does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getNickName(), nameRules), "User name does not meet the rules");
 
         final User user = ConvertUtil.convert(dto);
         final UserInfo userInfo = ConvertUtil.convertToInfo(dto);
@@ -122,7 +124,7 @@ public class UserImpl implements IUser {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateInfo(UserDto dto) {
         Precondition.checkArgument(dto.getId() != null && dto.getId() > 0, "User id is invalid");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getNickName(), nameRules), "User nickname does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getNickName(), nameRules), "User nickname does not meet the rules");
 
         Precondition.checkNotNull(userMapper.selectByPrimaryKey(dto.getId()), "User does not exist");
 
@@ -178,6 +180,19 @@ public class UserImpl implements IUser {
     }
 
     @Override
+    public UserPropertiesDto getProperty(Long id, String property) {
+        Precondition.checkArgument(id != null && id > 0, "User id is invalid");
+        Precondition.checkArgument(StringUtils.isNotBlank(property), "User property is invalid");
+
+        final UserProperties userProperties = userPropertiesMapper.selectByUserIdAndProperty(id, property);
+        if (Objects.isNull(userProperties)) {
+            return null;
+        }
+
+        return ConvertUtil.convert(userProperties);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean setProperties(Long id, String property, String value, Long mender) {
         Precondition.checkArgument(id != null && id > 0, "User id is invalid");
@@ -201,5 +216,41 @@ public class UserImpl implements IUser {
 
             return userPropertiesMapper.updateByPrimaryKey(userProperties) == 1;
         }
+    }
+
+    @Override
+    public List<Long> getUgIds(Long id) {
+        final List<UserUgRelation> relations = userUgRelationMapper.selectByUserId(id);
+        if (CollectionUtils.isEmpty(relations)) {
+            return Collections.emptyList();
+        }
+
+        return relations.stream().map(UserUgRelation::getUserGroupId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> getOrgIds(Long id) {
+        final List<UserOrgRelation> relations = userOrgRelationMapper.selectByUserId(id);
+        if (CollectionUtils.isEmpty(relations)) {
+            return Collections.emptyList();
+        }
+
+        return relations.stream().map(UserOrgRelation::getOrgId).collect(Collectors.toList());
+    }
+
+    @Override
+    public String salt(Long id) {
+        // generate salt by user basic info
+        Precondition.checkArgument(id != null && id > 0, "User id is invalid");
+
+        final User user = userMapper.selectByPrimaryKey(id);
+        Precondition.checkNotNull(user, "User does not exist");
+
+        final String name = user.getName();
+        final String code = user.getCode();
+        final Long orgRootId = user.getOrgRootId();
+        final Date createTime = user.getCreateTime();
+
+        return RandomStringUtils.random(saltLength, (name + code + orgRootId + createTime.getTime()));
     }
 }

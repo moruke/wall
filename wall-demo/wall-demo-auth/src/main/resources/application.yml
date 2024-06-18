@@ -20,7 +20,7 @@ spring:
     name: wall-demo-auth
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:9918/wall?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:9918/wall?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&allowPublicKeyRetrieval=true
     username: root
     password: wall_password
   mvc:
@@ -30,6 +30,7 @@ mybatis:
   mapper-locations:
     - classpath:mapperxml/account/*.xml
     - classpath:mapperxml/auth/*.xml
+    - classpath:mapperxml/identity/authentication/*.xml
 wall:
   plugin:
     auth:
@@ -42,11 +43,38 @@ wall:
       name-length: 20
       name-rules: NO_SPECIAL_CHARACTER,NO_SPACE,NO_CHINESE
     user:
+      salt-length: 18
       name-length: 20
       name-rules: NO_SPECIAL_CHARACTER,NO_SPACE,NO_CHINESE
     ug:
       name-length: 20
       name-rules: NO_SPECIAL_CHARACTER,NO_SPACE,NO_CHINESE
+    authentication:
+      cross-origin: "{'allow-credentials': 'true', 'allowed-headers': '*', 'allowed-methods': '*', 'allowed-origins': '*', 'exposed-headers': '*', 'max-age': '3600'}"
+      token-prefix: wall-token
+  token:
+    returnType: header
+    cookie:
+      domain: 127.0.0.1
+      max-age: 3600
+      path: /
+      secure: false
+      name: wall-token
+      http-only: false
 
+    type: jwt
+    jwt:
+      algorithm: HS256
+      secret: great wall for great application
+      expiration: 3600
+    token:
+      token-header-name: wall-token
+  credential:
+    type: password
+    password:
+      algorithm: PBKDF2WithHmacSHA256
+      salt-length: 18
+      iterations: 1024
+      key-length: 256
 server:
   port: 10151

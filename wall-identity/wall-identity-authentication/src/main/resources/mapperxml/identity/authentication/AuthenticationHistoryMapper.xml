@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.identity.authentication.dao.mapper.AuthenticationHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.identity.authentication.dao.entity.AuthenticationHistory">
+    <!--@mbg.generated-->
+    <!--@Table authentication_history-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="subject_id" jdbcType="VARCHAR" property="subjectId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `type`, `status`, subject_id, create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from authentication_history
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from authentication_history
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.identity.authentication.dao.entity.AuthenticationHistory" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into authentication_history (`type`, `status`, subject_id)
+    values (#{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{subjectId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.identity.authentication.dao.entity.AuthenticationHistory">
+    <!--@mbg.generated-->
+    update authentication_history
+    set `type` = #{type,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=TINYINT},
+      subject_id = #{subjectId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into authentication_history
+    (`type`, `status`, subject_id, create_time, modify_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.type,jdbcType=TINYINT}, #{item.status,jdbcType=TINYINT}, #{item.subjectId,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

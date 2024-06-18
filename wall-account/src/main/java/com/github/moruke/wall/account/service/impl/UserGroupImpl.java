@@ -13,8 +13,8 @@ import com.github.moruke.wall.account.dto.UserGroupPropertiesDto;
 import com.github.moruke.wall.account.enums.*;
 import com.github.moruke.wall.account.service.IUserGroup;
 import com.github.moruke.wall.account.utils.ConvertUtil;
-import com.github.moruke.wall.common.utils.DateUtils;
-import com.github.moruke.wall.common.utils.NameUtils;
+import com.github.moruke.wall.common.utils.DateUtil;
+import com.github.moruke.wall.common.utils.NameUtil;
 import com.github.moruke.wall.common.utils.Precondition;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,8 +52,8 @@ public class UserGroupImpl implements IUserGroup {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long add(UserGroupDto dto) {
-        Precondition.checkArgument(NameUtils.checkLength(dto.getName(), nameLength), "UserGroup name is too long");
-        Precondition.checkArgument(NameUtils.checkRule(dto.getName(), nameRules), "UserGroup name does not meet the rules");
+        Precondition.checkArgument(NameUtil.checkLength(dto.getName(), nameLength), "UserGroup name is too long");
+        Precondition.checkArgument(NameUtil.checkRule(dto.getName(), nameRules), "UserGroup name does not meet the rules");
 
         final UserGroup ug = ConvertUtil.convert(dto);
 
@@ -213,7 +213,7 @@ public class UserGroupImpl implements IUserGroup {
         newRelation.setType(UserUgRelationTypeEnum.DEFAULT.getCode());
         newRelation.setStatus(UserUgRelationStatusEnum.DEFAULT.getCode());
         // todo think about expire time, whether need it
-        newRelation.setExpireTime(DateUtils.maxDate());
+        newRelation.setExpireTime(DateUtil.maxDate());
 
         Precondition.checkArgument(userUgRelationMapper.insert(newRelation) == 1, "Failed to add userGroup user");
         return true;

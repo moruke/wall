@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.identity.authentication.dao.mapper.SessionMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.identity.authentication.dao.entity.Session">
+    <!--@mbg.generated-->
+    <!--@Table `session`-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="subject_id" jdbcType="VARCHAR" property="subjectId" />
+    <result column="aut_his_id" jdbcType="BIGINT" property="autHisId" />
+    <result column="root_org_id" jdbcType="BIGINT" property="rootOrgId" />
+    <result column="request" jdbcType="VARCHAR" property="request" />
+    <result column="response" jdbcType="VARCHAR" property="response" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="last_refresh" jdbcType="TIMESTAMP" property="lastRefresh" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `type`, `status`, subject_id, aut_his_id, root_org_id, request, response, create_time, 
+    modify_time, last_refresh
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from `session`
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from `session`
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.github.moruke.wall.identity.authentication.dao.entity.Session">
+    <!--@mbg.generated-->
+    insert into `session` (id, `type`, `status`, 
+      subject_id, aut_his_id, root_org_id, 
+      request, response, last_refresh)
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{subjectId,jdbcType=VARCHAR}, #{autHisId,jdbcType=BIGINT}, #{rootOrgId,jdbcType=BIGINT}, 
+      #{request,jdbcType=VARCHAR}, #{response,jdbcType=VARCHAR}, #{lastRefresh,jdbcType=TIMESTAMP})
+  </insert>
+
+  <delete id="deleteBySubjectId">
+    <!--@mbg.generated-->
+    delete from `session`
+    where subject_id = #{subjectId,jdbcType=VARCHAR}
+
+    </delete>
+
+  <update id="updateByPrimaryKey">
+      <!--@mbg.generated-->
+      update `session`
+      set `type`       = #{type,jdbcType=TINYINT},
+          `status`     = #{status,jdbcType=TINYINT},
+          subject_id   = #{subjectId,jdbcType=VARCHAR},
+          aut_his_id   = #{autHisId,jdbcType=BIGINT},
+          root_org_id  = #{rootOrgId,jdbcType=BIGINT},
+          request      = #{request,jdbcType=VARCHAR},
+          response     = #{response,jdbcType=VARCHAR},
+          modify_time  = CURRENT_TIMESTAMP,
+          last_refresh = #{lastRefresh,jdbcType=TIMESTAMP}
+      where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectBySubjectId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from `session`
+    where subject_id = #{subjectId,jdbcType=VARCHAR}
+    </select>
+</mapper>

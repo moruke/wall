@@ -3,9 +3,9 @@ package com.github.moruke.wall.auth.enums.permission;
 import lombok.Getter;
 
 public enum RoleTypeEnum {
-    SYSTEM("系统角色", (byte) 0),
-    CUSTOM("自定义角色", (byte) 1),
-    OTHER("其他", (byte) 100),
+    SYSTEM("system role", (byte) 0),
+    CUSTOM("custom role", (byte) 1),
+    OTHER("other", (byte) 100),
     ;
     @Getter
     private final String name;

@@ -22,7 +22,14 @@ public interface IUser {
 
     List<UserPropertiesDto> getProperties(Long id);
 
+    UserPropertiesDto getProperty(Long id, String property);
+
     boolean setProperties(Long id, String property, String value, Long mender);
 
+    List<Long> getOrgIds(Long id);
+
+    List<Long> getUgIds(Long id);
+
+    String salt(Long id);
 
 }

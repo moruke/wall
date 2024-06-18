@@ -6,7 +6,7 @@ import com.github.moruke.wall.auth.dtos.permission.*;
 import com.github.moruke.wall.auth.enums.permission.*;
 import com.github.moruke.wall.common.dto.DomainDto;
 import com.github.moruke.wall.common.enums.SubjectTypeEnum;
-import com.github.moruke.wall.common.utils.DateUtils;
+import com.github.moruke.wall.common.utils.DateUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -111,7 +111,7 @@ public class ConvertUtil {
         RoleRelation roleRelation = new RoleRelation();
         roleRelation.setSubjectId(type.getId(subjectId));
         roleRelation.setRoleId(roleId);
-        roleRelation.setExpireTime(isNull(expireTime) ? DateUtils.maxDate() : expireTime);
+        roleRelation.setExpireTime(isNull(expireTime) ? DateUtil.maxDate() : expireTime);
         roleRelation.setStatus(RoleRelationStatusEnum.DEFAULT.getCode());
         roleRelation.setType(RoleRelationTypeEnum.DEFAULT.getCode());
         roleRelation.setCreator(userId);
@@ -206,7 +206,7 @@ public class ConvertUtil {
         permission.setCreator(dto.getCreator());
         permission.setMender(dto.getMender());
 
-        permission.setExpireTime(isNull(dto.getExpireTime()) ? DateUtils.maxDate() : dto.getExpireTime());
+        permission.setExpireTime(isNull(dto.getExpireTime()) ? DateUtil.maxDate() : dto.getExpireTime());
         permission.setCreateTime(dto.getCreateTime());
         permission.setModifyTime(dto.getModifyTime());
         return permission;
@@ -227,7 +227,7 @@ public class ConvertUtil {
         permission.setCreator(userId);
         permission.setMender(userId);
 
-        permission.setExpireTime(isNull(expireTime) ? DateUtils.maxDate() : expireTime);
+        permission.setExpireTime(isNull(expireTime) ? DateUtil.maxDate() : expireTime);
 
         return permission;
     }

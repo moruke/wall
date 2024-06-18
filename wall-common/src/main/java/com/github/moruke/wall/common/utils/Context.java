@@ -35,4 +35,10 @@ public class Context {
     public static long getSubjectId() {
         return requireNonNull(SUBJECT_ID.get(), "subjectId is null");
     }
+
+    public static void clear() {
+        DOMAIN.remove();
+        PERMISSION_IDS.remove();
+        SUBJECT_ID.remove();
+    }
 }

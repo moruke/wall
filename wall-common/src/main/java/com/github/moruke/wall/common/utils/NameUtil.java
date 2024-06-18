@@ -4,7 +4,7 @@ import com.github.moruke.wall.common.enums.NameRuleEnum;
 
 import java.util.List;
 
-public class NameUtils {
+public class NameUtil {
 
     public static final int NAME_LENGTH = 20;
 

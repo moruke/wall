@@ -8,6 +8,7 @@ public enum SubjectTypeEnum {
     USER(1, "user", "u"),
     USER_GROUP(2, "user_group", "ug"),
     ROLE(3, "role", "r"),
+    APPLICATION(4, "application", "a"),
 
     ;
     @Getter
@@ -39,6 +40,15 @@ public enum SubjectTypeEnum {
             }
         }
         throw new IllegalArgumentException("unknown id: " + id);
+    }
+
+    public static SubjectTypeEnum find(String type) {
+        for (SubjectTypeEnum value : values()) {
+            if (value.name.equalsIgnoreCase(type)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("unknown type: " + type);
     }
 
     public String getId(Long id) {

@@ -2,7 +2,6 @@ package com.github.moruke.wall.account.service;
 
 import com.github.moruke.wall.account.dto.OrgPropertiesDto;
 import com.github.moruke.wall.account.dto.OrganizationDto;
-import com.github.moruke.wall.account.dto.UserDto;
 
 import java.util.List;
 
@@ -44,4 +43,8 @@ public interface IOrganization {
     boolean addUserGroup(Long id, Long userGroupId, Long mender);
 
     boolean removeUserGroup(Long id, Long userGroupId, Long mender);
+
+    OrganizationDto getRootOrgByName(String rootOrgName);
+
+    boolean checkValid(Long orgId, Long rootId);
 }

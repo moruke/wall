@@ -16,6 +16,7 @@
         <module>wall-bootstrap</module>
         <module>wall-bootstrap/wall-bootstrap-spring-boot</module>
         <module>wall-account</module>
+        <module>wall-identity</module>
     </modules>
 
     <properties>
@@ -52,6 +53,7 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <jcasbin.version>1.55.0</jcasbin.version>
         <aspectjweaver.version>1.9.5</aspectjweaver.version>
+        <jjwt.version>0.12.5</jjwt.version>
     </properties>
 
 
@@ -213,6 +215,25 @@
                 <groupId>org.casbin</groupId>
                 <artifactId>jcasbin</artifactId>
                 <version>${jcasbin.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
 
         </dependencies>

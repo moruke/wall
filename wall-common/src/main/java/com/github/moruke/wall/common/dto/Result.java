@@ -13,6 +13,9 @@ public class Result<T> implements Serializable {
     private T data;
     private long timestamp = System.currentTimeMillis();
 
+    private Result() {
+    }
+
     private Result(int code, String message, T data) {
         this.code = code;
         this.message = message;

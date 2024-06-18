@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableConfigurationProperties
 @EnableScheduling
 @EnableAsync(proxyTargetClass = true)
-@MapperScan({"com.github.moruke.wall.auth.dao.mapper", "com.github.moruke.wall.account.dao.mapper"})
+@MapperScan({"com.github.moruke.wall.auth.dao.mapper", "com.github.moruke.wall.account.dao.mapper", "com.github.moruke.wall.identity.authentication.dao.mapper"})
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

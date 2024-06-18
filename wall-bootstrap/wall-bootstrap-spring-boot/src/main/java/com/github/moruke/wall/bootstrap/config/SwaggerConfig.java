@@ -30,8 +30,6 @@ public class SwaggerConfig {
 
     }
 
-    //构建 api文档的详细信息函数
-
     private ApiInfo apiInfo() {
 
         return new ApiInfoBuilder()

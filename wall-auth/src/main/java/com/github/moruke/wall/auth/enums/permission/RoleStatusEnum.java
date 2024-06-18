@@ -3,7 +3,7 @@ package com.github.moruke.wall.auth.enums.permission;
 import lombok.Getter;
 
 public enum RoleStatusEnum {
-    DEFAULT("默认", (byte) 0),
+    DEFAULT("default", (byte) 0),
     ;
 
     @Getter

@@ -77,6 +77,12 @@
             <artifactId>wall-account</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.moruke</groupId>
+            <artifactId>wall-identity-authentication</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

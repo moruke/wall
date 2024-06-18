@@ -40,3 +40,5 @@ build/
 /blog/
 /logs/
 /.idea/
+!**/logs/*.log
+/wall-demo/wall-demo-auth/logs/
