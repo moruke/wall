@@ -10,6 +10,7 @@ import com.github.moruke.wall.bootstrap.token.ISessionManager;
 import com.github.moruke.wall.common.utils.Precondition;
 import com.github.moruke.wall.identity.authentication.dtos.LoginResponseDto;
 import com.github.moruke.wall.identity.authentication.dtos.SessionDto;
+import com.github.moruke.wall.identity.authentication.enums.LoginStatusEnum;
 import com.github.moruke.wall.identity.authentication.service.IToken;
 import com.github.moruke.wall.identity.authentication.utils.AuthenticationContext;
 import org.apache.commons.collections4.CollectionUtils;
@@ -56,9 +57,7 @@ public class SessionAspect {
     public void before(JoinPoint joinPoint) {
         // check token
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if(servletRequestAttributes == null) {
-            throw new RuntimeException("ServletRequestAttributes is null");
-        }
+        Precondition.checkNotNull(servletRequestAttributes, "ServletRequestAttributes is null");
 
         final HttpServletRequest request = servletRequestAttributes.getRequest();
         final String token = extraToken(request);
@@ -127,6 +126,11 @@ public class SessionAspect {
         final HttpServletResponse response = servletRequestAttributes.getResponse();
 
         Precondition.checkNotNull(response, "response is null");
+
+        final Byte status = loginResponse.getStatus();
+        if(!LoginStatusEnum.find(status).isSuccess()) {
+            return;
+        }
 
         final String token = loginResponse.getToken();
 

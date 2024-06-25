@@ -23,4 +23,9 @@ public class AuthenticationContext {
     public static void setRequest(LoginRequestDto loginRequest) {
         REQUEST.set(loginRequest);
     }
+
+    public static void clear() {
+        RESPONSE.remove();
+        REQUEST.remove();
+    }
 }

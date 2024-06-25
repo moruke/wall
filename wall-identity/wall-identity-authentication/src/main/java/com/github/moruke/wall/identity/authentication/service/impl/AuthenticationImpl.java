@@ -11,8 +11,10 @@ import com.github.moruke.wall.common.utils.Precondition;
 import com.github.moruke.wall.identity.authentication.aspect.Authentication;
 import com.github.moruke.wall.identity.authentication.dao.entity.AuthenticationHistory;
 import com.github.moruke.wall.identity.authentication.dao.entity.Credential;
+import com.github.moruke.wall.identity.authentication.dao.entity.TwoFactor;
 import com.github.moruke.wall.identity.authentication.dao.mapper.AuthenticationHistoryMapper;
 import com.github.moruke.wall.identity.authentication.dao.mapper.CredentialMapper;
+import com.github.moruke.wall.identity.authentication.dao.mapper.TwoFactorMapper;
 import com.github.moruke.wall.identity.authentication.dtos.CredentialMetaDto;
 import com.github.moruke.wall.identity.authentication.dtos.LoginRequestDto;
 import com.github.moruke.wall.identity.authentication.dtos.LoginResponseDto;
@@ -26,12 +28,17 @@ import com.github.moruke.wall.identity.authentication.service.ICredential;
 import com.github.moruke.wall.identity.authentication.service.IToken;
 import com.github.moruke.wall.identity.authentication.utils.ConvertUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.github.moruke.wall.common.constant.AuthenticationConstant.TOW_FACTOR_AUTHENTICATION;
 
@@ -52,9 +59,12 @@ public class AuthenticationImpl implements IAuthentication {
     private AuthenticationHistoryMapper authenticationHistoryMapper;
 
     @Resource
-    private Map<CredentialTypeEnum, IAutProcessor> processor;
+    private TwoFactorMapper twoFactorMapper;
 
     @Resource
+    private Map<CredentialTypeEnum, IAutProcessor> processor;
+
+//    @Resource
     private ICredential credentialImpl;
 
     @Resource
@@ -66,6 +76,8 @@ public class AuthenticationImpl implements IAuthentication {
     @Resource
     private PasswordImpl passwordImpl;
 
+    private Map<String, UserDto> sessionCodeUserMap = new ConcurrentHashMap<>();
+
     @Override
     @Authentication
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
@@ -76,28 +88,45 @@ public class AuthenticationImpl implements IAuthentication {
         try {
             check(loginRequestDto);
 
+            final String sessionCode = loginRequestDto.getSessionCode();
+
+            UserDto userDto = null;
             final String rootOrgName = loginRequestDto.getRootOrgName();
             final OrganizationDto org = organizationImpl.getRootOrgByName(rootOrgName);
-            Precondition.checkState(organizationImpl.checkValid(org.getId(), org.getRootId()), "rootOrgName is invalid");
-            loginRequestDto.setRootOrgId(org.getId());
 
-            final UserDto userDto = userImpl.get(loginRequestDto.getUsername(), null, org.getId());
-            Precondition.checkNotNull(userDto, "username or password is invalid");
-            loginRequestDto.setUserId(userDto.getId());
+            if (StringUtils.isBlank(sessionCode)) {
+                // need check password first
+                Precondition.checkState(organizationImpl.checkValid(org.getId(), org.getRootId()), "rootOrgName is invalid");
+                loginRequestDto.setRootOrgId(org.getId());
 
-            final CredentialTypeEnum type = loginRequestDto.getType();
-            processor.get(type).authenticate(loginRequestDto);
+                userDto  = userImpl.get(loginRequestDto.getUsername(), null, org.getId());
+                Precondition.checkNotNull(userDto, "username or password is invalid");
+                loginRequestDto.setUserId(userDto.getId());
 
-            final UserPropertiesDto property = userImpl.getProperty(userDto.getId(), TOW_FACTOR_AUTHENTICATION);
-            if (Objects.nonNull(property)) {
+                final CredentialTypeEnum type = loginRequestDto.getType();
+                processor.get(type).authenticate(loginRequestDto);
+            } else {
+                userDto = sessionCodeUserMap.get(sessionCode);
+            }
 
-                // todo generate session code
+            final List<TwoFactor> twoFactors = twoFactorMapper.selectByUserId(userDto.getId());
 
-                // todo redirect to two factor authentication
+            if (CollectionUtils.isNotEmpty(twoFactors) && twoFactors.stream().noneMatch(twoFactor -> Objects.equals(credentialMapper.selectByPrimaryKey(twoFactor.getCredentialId()).getType(), loginRequestDto.getType().getCode()))) {
+
+                final String _sessionCode = UUID.randomUUID().toString();
+                sessionCodeUserMap.put(_sessionCode, userDto);
+
+                final List<String> codes = twoFactors.stream().map(TwoFactor::getCode).collect(Collectors.toList());
                 status = LoginStatusEnum.PROCESSING.getCode();
                 response = new LoginResponseDto();
 
-                // TODO 2024/6/24 dijie :fill response
+                response.setTwoFactors(codes);
+                response.setSubjectId(SubjectTypeEnum.USER.getId(userDto.getId()));
+                response.setUserId(userDto.getId());
+                response.setRootOrgId(org.getId());
+                response.setSessionCode(_sessionCode);
+                response.setStatus(status);
+
             } else {
                 // todo only user at present
                 final List<Long> orgIds = userImpl.getOrgIds(userDto.getId());
@@ -107,14 +136,16 @@ public class AuthenticationImpl implements IAuthentication {
                 final String token = tokenImpl.generateToken(user);
                 final String refreshToken = tokenImpl.generateRefreshToken(user);
 
+                status = LoginStatusEnum.SUCCESS.getCode();
+
                 response = new LoginResponseDto();
                 response.setToken(token);
                 response.setRefreshToken(refreshToken);
                 response.setSubjectId(SubjectTypeEnum.USER.getId(userDto.getId()));
                 response.setUserId(userDto.getId());
                 response.setRootOrgId(org.getId());
+                response.setStatus(status);
 
-                status = LoginStatusEnum.SUCCESS.getCode();
             }
 
             return response;
@@ -188,11 +219,16 @@ public class AuthenticationImpl implements IAuthentication {
 
         // todo check code valid
 
-        // todo check clientId valid
+        // todo just support postman now.
+        final String clientId = loginRequestDto.getClientId();
+        Precondition.checkArgument("postman".equals(clientId), "clientId is invalid");
+
+        if (StringUtils.isNotBlank(loginRequestDto.getSessionCode()) && !sessionCodeUserMap.containsKey(loginRequestDto.getSessionCode())) {
+            // sessionCode is invalid or expired, must login again
+            throw new RuntimeException("sessionCode is invalid or expired");
+        }
 
         // todo check redirectUri valid
-
-        // todo check state valid
 
         // todo check scope valid
 

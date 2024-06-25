@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class LoginResponseDto {
@@ -11,6 +12,7 @@ public class LoginResponseDto {
     protected String token;
     protected String refreshToken;
     protected String tokenType;
+    protected Byte status;
     protected Long expiresIn;
     protected Long autHisId;
     protected String scope;
@@ -21,7 +23,8 @@ public class LoginResponseDto {
     protected String code;
     protected String sessionCode;
     protected Date createTime = new Date();
-
+    protected String redirectUrl;
+    protected List<String> twoFactors;
     protected Long rootOrgId;
     protected Long userId;
 }

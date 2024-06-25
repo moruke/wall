@@ -1,6 +1,7 @@
 package com.github.moruke.wall.bootstrap.api.authentication;
 
 import com.github.moruke.wall.bootstrap.annotation.Session;
+import com.github.moruke.wall.bootstrap.annotation.State;
 import com.github.moruke.wall.bootstrap.token.ISessionManager;
 import com.github.moruke.wall.common.dto.Result;
 import com.github.moruke.wall.identity.authentication.dtos.LoginRequestDto;
@@ -26,6 +27,7 @@ public class AuthenticationApi {
     @PostMapping("login")
     @ApiOperation(value = "login", httpMethod = "POST")
     @Session
+    @State
     public Result<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
         return Result.success(authenticationImpl.login(dto));
     }

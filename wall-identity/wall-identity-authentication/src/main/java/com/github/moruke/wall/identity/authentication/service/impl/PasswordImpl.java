@@ -39,7 +39,7 @@ public class PasswordImpl implements IAutProcessor, ICredential {
     @Resource
     private IUser userImpl;
 
-    public static final String NAME = "password";
+    private static final String NAME = "password";
 
     @Override
     public String name() {
@@ -78,12 +78,12 @@ public class PasswordImpl implements IAutProcessor, ICredential {
     @Override
     public void authenticate(LoginRequestDto req) {
         Precondition.checkState(req.getType() == CredentialTypeEnum.PASSWORD, "type is invalid");
-        final Credential c = credentialMapper.selectBySubjectId(SubjectTypeEnum.USER.getId(req.getUserId()));
+        final Credential c = credentialMapper.selectBySubjectIdAndType(SubjectTypeEnum.USER.getId(req.getUserId()), CredentialTypeEnum.PASSWORD.getCode());
         Precondition.checkNotNull(c, "username or password is invalid");
         final String salt = c.getSalt();
 
         // todo only user at present , need to support other subject
-        final String data = data(salt, credentialMetaDto, req.getPassword());
+        final String data = data(salt, credentialMetaDto, req.getCredentialData());
         final Credential credential = credentialMapper.selectByTypeUIdAndData(CredentialTypeEnum.PASSWORD.getCode(), SubjectTypeEnum.USER.getId(req.getUserId()), data);
         Precondition.checkNotNull(credential, "username or password is invalid");
     }

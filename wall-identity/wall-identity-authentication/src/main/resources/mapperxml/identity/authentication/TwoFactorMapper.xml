@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.moruke.wall.identity.authentication.dao.mapper.TwoFactorMapper">
+  <resultMap id="BaseResultMap" type="com.github.moruke.wall.identity.authentication.dao.entity.TwoFactor">
+    <!--@mbg.generated-->
+    <!--@Table two_factor-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uesr_id" jdbcType="BIGINT" property="uesrId" />
+    <result column="credential_id" jdbcType="BIGINT" property="credentialId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, uesr_id, credential_id, code, `type`, `status`, create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from two_factor
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from two_factor
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.github.moruke.wall.identity.authentication.dao.entity.TwoFactor" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into two_factor (uesr_id, credential_id, code, 
+      `type`, `status`)
+    values (#{uesrId,jdbcType=BIGINT}, #{credentialId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, 
+      #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.github.moruke.wall.identity.authentication.dao.entity.TwoFactor">
+    <!--@mbg.generated-->
+    update two_factor
+    set uesr_id = #{uesrId,jdbcType=BIGINT},
+      credential_id = #{credentialId,jdbcType=BIGINT},
+      code = #{code,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=TINYINT},
+      modify_time = CURRENT_TIMESTAMP
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into two_factor
+    (uesr_id, credential_id, code, `type`, `status`, create_time, modify_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.uesrId,jdbcType=BIGINT}, #{item.credentialId,jdbcType=BIGINT}, #{item.code,jdbcType=VARCHAR}, 
+        #{item.type,jdbcType=TINYINT}, #{item.status,jdbcType=TINYINT}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifyTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from two_factor
+    where uesr_id = #{userId,jdbcType=BIGINT}
+    </select>
+</mapper>

@@ -8,10 +8,8 @@ import lombok.Data;
 public class LoginRequestDto {
     protected String rootOrgName;
     protected String username;
-    protected String password;
+    protected String credentialData;
     protected CredentialTypeEnum type;
-    protected TwoFactorTypeEnum twoFactorType;
-    protected TwoFactorValueDto twoFactorValue;
     protected Boolean rememberMe = false;
     protected String code;
     protected String sessionCode;

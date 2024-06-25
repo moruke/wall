@@ -18,4 +18,16 @@ public enum LoginStatusEnum {
         this.name = name;
     }
 
+    public static LoginStatusEnum find(Byte status) {
+        for (LoginStatusEnum value : values()) {
+            if (value.code.equals(status)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("unknown status: " + status);
+    }
+
+    public boolean isSuccess() {
+        return this == SUCCESS;
+    }
 }
